@@ -1,0 +1,40 @@
+#!/bin/bash
+location=$1
+
+vpn_disconnect() {
+  echo "Disconnecting the vpn"
+  hotspotshield disconnect
+  exit 1
+}
+
+input_choice() {
+	read -p "Do you want to start the vpn? = " input
+	case "$input" in
+	"y")
+		echo "Stating your vpn with default location...."
+		hotspotshield connect
+		watch -n1 hotspotshield status &
+		watch_pid=$!
+      	trap vpn_disconnect INT
+      	wait $watch_pid
+		;;
+	"n")
+		echo "Disconnecting your vpn..."
+		hotspotshield disconnect
+		;;
+	*)
+		echo "Provide values y/n only..."
+		exit 1
+		;;
+	esac
+}
+
+vpn_connect() {
+	if [ -n "$location" ]; then
+		hotspotshield connect "$location"
+	else
+		input_choice
+	fi
+}
+
+vpn_connect
