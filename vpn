@@ -2,8 +2,8 @@
 location=$1
 
 vpn_disconnect() {
-  echo "Disconnecting the vpn"
-  hotspotshield disconnect
+  echo "Disconnecting the vpn ✅"
+  hotspotshield disconnect 
   exit 1
 }
 
